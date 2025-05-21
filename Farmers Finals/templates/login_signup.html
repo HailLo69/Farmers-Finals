@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login / Signup - Agriculture Portal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
+
+        body {
+            font-family: 'Josefin Sans', sans-serif;
+            background: linear-gradient(135deg, #a8d5ba, #f0f7f4);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            max-width: 420px;
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(56, 94, 57, 0.2);
+            padding: 2rem 2.5rem;
+            border: 4px solid #82b366;
+            text-align: center;
+        }
+
+        h2 {
+            color: #3a5923;
+            margin-bottom: 1.5rem;
+            font-size: 2.4rem;
+            text-shadow: 1px 1px 0 #c9e5c4;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab {
+            cursor: pointer;
+            padding: 0.8rem 2rem;
+            background: #e6f0e6;
+            color: #3a5923;
+            font-weight: 600;
+            border-radius: 30px 30px 0 0;
+            margin: 0 5px;
+            box-shadow: inset 0 -3px 0 #82b366;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            user-select: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* subtle hover highlight sliding from bottom */
+        .tab:hover:not(.active)::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #6a8f4a;
+            animation: slideIn 0.3s forwards;
+        }
+        @keyframes slideIn {
+            from {width: 0;}
+            to {width: 100%;}
+        }
+
+        .tab.active {
+            background: #82b366;
+            color: #f0f7f4;
+            box-shadow: none;
+        }
+
+        form {
+            border-top: 4px solid #82b366;
+            padding-top: 1.5rem;
+            text-align: left;
+
+            /* for animation */
+            opacity: 0;
+            visibility: hidden;
+            position: absolute;
+            width: 100%;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        form.active {
+            opacity: 1;
+            visibility: visible;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.3rem;
+            color: #3e4a33;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.6rem 0.8rem;
+            margin-bottom: 1.2rem;
+            border: 2px solid #a9cbb7;
+            border-radius: 10px;
+            font-size: 1rem;
+            color: #3a5923;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #5a7a3d;
+            background-color: #ebf2e7;
+        }
+
+        button {
+            background-color: #82b366;
+            border: none;
+            color: #f0f7f4;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 0.75rem 1.8rem;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 6px 12px rgba(130, 179, 102, 0.5);
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #6a8f4a;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+            }
+            .container {
+                padding: 1.5rem 1.8rem;
+            }
+            .tab {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+            h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>User Login / Signup</h2>
+
+    <div class="tabs">
+        <span class="tab active" id="login-tab">Login</span>
+        <span class="tab" id="signup-tab">Signup</span>
+    </div>
+
+    <form id="login-form" action="/login" method="POST" class="active">
+        <label for="login-email">Email:</label>
+        <input type="email" id="login-email" name="email" required />
+
+        <label for="login-password">Password:</label>
+        <input type="password" id="login-password" name="password" required />
+
+        <button type="submit">Login</button>
+    </form>
+
+    <form id="signup-form" action="/signup" method="POST">
+        <label for="signup-name">Name:</label>
+        <input type="text" id="signup-name" name="name" required />
+
+        <label for="signup-email">Email:</label>
+        <input type="email" id="signup-email" name="email" required />
+
+        <label for="signup-password">Password:</label>
+        <input type="password" id="signup-password" name="password" required />
+
+        <label for="signup-role">Role:</label>
+        <select id="signup-role" name="role" required>
+            <option value="farmer">Farmer</option>
+            <option value="technician">Technician</option>
+        </select>
+
+        <button type="submit">Signup</button>
+    </form>
+</div>
+
+<script>
+    const loginTab = document.getElementById('login-tab');
+    const signupTab = document.getElementById('signup-tab');
+    const loginForm = document.getElementById('login-form');
+    const signupForm = document.getElementById('signup-form');
+
+    loginTab.addEventListener('click', () => {
+        if(loginTab.classList.contains('active')) return; // no change
+
+        loginTab.classList.add('active');
+        signupTab.classList.remove('active');
+
+        signupForm.classList.remove('active');
+        loginForm.classList.add('active');
+    });
+
+    signupTab.addEventListener('click', () => {
+        if(signupTab.classList.contains('active')) return; // no change
+
+        signupTab.classList.add('active');
+        loginTab.classList.remove('active');
+
+        loginForm.classList.remove('active');
+        signupForm.classList.add('active');
+    });
+</script>
+
+</body>
+</html>

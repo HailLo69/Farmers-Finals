@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Add Crop</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
+
+        body {
+            font-family: 'Roboto Slab', serif;
+            max-width: 400px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: #e9f3df;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(74, 108, 47, 0.2);
+            color: #3a5a20;
+            animation: fadeIn 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #4a6c2f;
+            text-shadow: 1px 1px 1px #b9d9a5;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            color: #4a6c2f;
+        }
+
+        input[type="text"],
+        input[type="date"] {
+            padding: 0.6rem 1rem;
+            border: 2px solid #a8c397;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            color: #3a5a20;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus {
+            border-color: #5d8040;
+            background-color: #f0f6e9;
+            outline: none;
+        }
+
+        button {
+            margin-top: 1.8rem;
+            padding: 0.8rem 2rem;
+            background-color: #5d8040;
+            color: #f4f9f4;
+            font-weight: 700;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 5px 12px rgba(93, 128, 64, 0.5);
+            transition: background-color 0.3s ease;
+            width: auto;
+            align-self: center;
+            font-size: 1.1rem;
+        }
+
+        button:hover {
+            background-color: #496533;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            body {
+                margin: 1.5rem;
+                padding: 1.5rem;
+                box-shadow: none;
+                border-radius: 12px;
+            }
+
+            button {
+                width: 100%;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>Add New Crop</h2>
+    <form action="/farmer/add_crop" method="POST" onsubmit="redirectAfterSubmit()">
+        <label for="crop_name">Crop Name:</label>
+        <input type="text" id="crop_name" name="name" placeholder="Enter crop name" required />
+
+        <label for="planting_date">Planting Date:</label>
+        <input type="date" id="planting_date" name="planting_date" required />
+
+        <button type="submit">Add Crop</button>
+    </form>
+
+    <script>
+        function redirectAfterSubmit() {
+            setTimeout(function () {
+                window.location.href = "/farmer/cropprogress";
+            }, 100); // Slight delay after form submission
+        }
+    </script>
+</body>
+</html>

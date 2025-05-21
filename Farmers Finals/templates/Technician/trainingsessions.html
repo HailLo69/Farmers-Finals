@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <title>Training Sessions</title>
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    function confirmDelete(sessionTitle) {
+      return confirm(`Are you sure you want to delete the training session "${sessionTitle}"?`);
+    }
+  </script>
+</head>
+<body class="bg-cyan-950 text-cyan-100 font-sans min-h-screen flex flex-col items-center p-6">
+
+  <div class="max-w-5xl w-full bg-cyan-900 rounded-xl shadow-lg border border-cyan-700 p-8">
+    <h1 class="text-4xl font-extrabold text-cyan-400 text-center mb-6 drop-shadow-md">Training Sessions</h1>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="mb-6">
+          {% for category, message in messages %}
+            <div class="px-4 py-2 rounded text-sm font-medium mb-2
+                        {% if category == 'success' %}
+                          bg-green-600 text-white
+                        {% elif category == 'error' %}
+                          bg-red-600 text-white
+                        {% else %}
+                          bg-cyan-700 text-white
+                        {% endif %}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Buttons -->
+    <div class="mb-6 text-center space-x-4">
+      <a href="{{ url_for('upload_training_session') }}" 
+         class="inline-block px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-cyan-900 font-semibold rounded-lg shadow transition">
+        Add New Training Session
+      </a>
+      <a href="{{ url_for('technician_dashboard') }}"
+         class="inline-block px-6 py-3 bg-cyan-700 hover:bg-cyan-600 text-cyan-100 font-semibold rounded-lg shadow transition">
+        Back to Dashboard
+      </a>
+    </div>
+
+    <!-- Table or Message -->
+    {% if sessions %}
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-cyan-700">
+        <thead class="bg-cyan-900">
+          <tr>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-cyan-400 uppercase tracking-wider">Title</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-cyan-400 uppercase tracking-wider">Description</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-cyan-400 uppercase tracking-wider">Trainer</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-cyan-400 uppercase tracking-wider">Scheduled Date</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-cyan-400 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-cyan-800 divide-y divide-cyan-700">
+          {% for session in sessions %}
+          <tr class="hover:bg-cyan-700 transition">
+            <td class="px-6 py-4 whitespace-nowrap font-medium text-cyan-100">{{ session.title }}</td>
+            <td class="px-6 py-4 whitespace-normal max-w-xl">{{ session.description }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ session.trainer_name or 'N/A' }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ session.scheduled_date.strftime('%Y-%m-%d %H:%M') if session.scheduled_date else 'TBD' }}</td>
+            <td class="px-6 py-4 whitespace-nowrap space-x-2">
+              <a href="{{ url_for('edit_training_session', session_id=session.id) }}"
+                 class="inline-block px-3 py-1 rounded-md bg-blue-600 hover:bg-blue-500 text-cyan-100 font-semibold shadow transition">
+                Edit
+              </a>
+              <form method="POST" action="{{ url_for('delete_training_session', session_id=session.id) }}" class="inline" onsubmit="return confirmDelete('{{ session.title }}');">
+                <button type="submit"
+                        class="px-3 py-1 rounded-md bg-red-600 hover:bg-red-500 text-cyan-100 font-semibold shadow transition">
+                  Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="text-center italic text-cyan-400 mt-10">No training sessions scheduled yet.</p>
+    {% endif %}
+  </div>
+
+</body>
+</html>

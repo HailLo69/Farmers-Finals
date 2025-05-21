@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Request Expert Help</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
+
+        body {
+            font-family: 'Roboto Slab', serif;
+            max-width: 600px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: linear-gradient(135deg, #d6eadf, #f9fdf7);
+            color: #2d4a1f;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #3a6b24;
+            text-shadow: 1px 1px 1px #b9d9a5;
+            opacity: 0;
+            animation: fadeIn 0.8s forwards;
+        }
+
+        form {
+            background: #e9f3df;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(46, 91, 19, 0.15);
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.8s 0.15s forwards;
+            opacity: 0;
+        }
+
+        label {
+            font-weight: 700;
+            margin-top: 1rem;
+            color: #4a6c2f;
+        }
+
+        select, textarea {
+            padding: 0.7rem 1rem;
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            border: 2px solid #a8c397;
+            border-radius: 12px;
+            font-family: inherit;
+            color: #3a5a20;
+            transition: border-color 0.3s ease;
+            resize: vertical;
+        }
+
+        select:focus, textarea:focus {
+            border-color: #5d8040;
+            background-color: #f0f6e9;
+            outline: none;
+        }
+
+        textarea {
+            min-height: 140px;
+        }
+
+        button {
+            margin-top: 2rem;
+            width: fit-content;
+            align-self: center;
+            background-color: #5d8040;
+            color: #f4f9f4;
+            font-weight: 700;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 5px 12px rgba(93, 128, 64, 0.5);
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #496533;
+        }
+
+        .nav-links {
+            margin-top: 2.5rem;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 0.8s 0.3s forwards;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #5d8040;
+            font-weight: 700;
+            border: 2px solid #5d8040;
+            padding: 0.6rem 1.5rem;
+            border-radius: 15px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: inline-block;
+        }
+
+        .nav-links a:hover {
+            background-color: #5d8040;
+            color: #f0f7f4;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+                max-width: 100%;
+            }
+
+            form {
+                padding: 1.5rem;
+            }
+
+            button {
+                width: 100%;
+                font-size: 1rem;
+            }
+
+            .nav-links a {
+                display: block;
+                margin: 0.8rem auto 0;
+                width: 60%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Request Expert Assistance</h2>
+
+    <form action="{{ url_for('submit_expert_request') }}" method="POST">
+        <label for="crop_id">Select Crop (optional):</label>
+        <select id="crop_id" name="crop_id">
+            <option value="">-- None --</option>
+            {% for crop in crops %}
+                <option value="{{ crop.crop_id }}">{{ crop.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="problem">Describe the problem:</label>
+        <textarea id="problem" name="problem" required placeholder="Explain the issue you're facing..."></textarea>
+
+        <button type="submit">Submit Request</button>
+    </form>
+
+    <div class="nav-links">
+        <a href="{{ url_for('farmer_dashboard') }}">← Back to Dashboard</a>
+    </div>
+
+</body>
+</html>

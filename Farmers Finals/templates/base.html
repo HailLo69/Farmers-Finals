@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}My App{% endblock %}</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cyan: {
+              950: '#06283D',
+              900: '#0A3D62',
+              800: '#1363DF',
+              700: '#47B5FF',
+              600: '#00B8D9',
+              500: '#00A6ED',
+              400: '#48CAE4',
+              300: '#90E0EF',
+              200: '#ADE8F4',
+              100: '#CAF0F8'
+            }
+          },
+          fontFamily: {
+            sans: ['"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+            mono: ['"Fira Mono"', 'monospace']
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-cyan-950 text-cyan-100 font-sans min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-cyan-900 shadow-lg border-b border-cyan-700">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="/" class="flex items-center space-x-3">
+        <!-- Tech icon -->
+        <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74 9.94"></path>
+        </svg>
+        <h1 class="text-3xl font-extrabold tracking-tight text-cyan-100">TechFarm Solutions</h1>
+      </a>
+      
+      <!-- Desktop nav -->
+      <nav class="hidden md:flex space-x-8 font-medium tracking-wide text-cyan-200">
+        <a href="/" class="hover:text-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition rounded px-2 py-1">Home</a>
+        <a href="/technician/resources" class="hover:text-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition rounded px-2 py-1">Resources</a>
+        <a href="/technician/consultations" class="hover:text-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition rounded px-2 py-1">Consultations</a>
+        <!-- Add more nav links as needed -->
+      </nav>
+      
+      <!-- Mobile menu button -->
+      <button
+        id="mobile-menu-button"
+        class="md:hidden text-cyan-100 hover:text-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 rounded p-2"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+      >
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+    
+    <!-- Mobile nav menu -->
+    <nav id="mobile-menu" class="hidden md:hidden bg-cyan-900 border-t border-cyan-700">
+      <div class="px-6 py-4 space-y-2 font-medium text-cyan-200">
+        <a href="/" class="block px-3 py-2 rounded hover:bg-cyan-800 hover:text-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition">Home</a>
+        <a href="/technician/resources" class="block px-3 py-2 rounded hover:bg-cyan-800 hover:text-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition">Resources</a>
+        <a href="/technician/consultations" class="block px-3 py-2 rounded hover:bg-cyan-800 hover:text-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition">Consultations</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main content -->
+  <main class="flex-grow max-w-7xl mx-auto px-6 py-10 bg-gradient-to-tr from-cyan-900 via-cyan-950 to-cyan-900 rounded-lg shadow-lg">
+    <section aria-label="Page content" class="prose prose-invert max-w-none">
+      {% block content %}{% endblock %}
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer
+    class="bg-gradient-to-t from-cyan-900 to-cyan-800 border-t border-cyan-800 text-center py-8 text-sm text-cyan-300 select-none shadow-inner"
+  >
+    &copy; {{ current_year or "2025" }} TechFarm Solutions. All rights reserved.
+  </footer>
+
+  <!-- Mobile menu toggle script -->
+  <script>
+    const btn = document.getElementById('mobile-menu-button');
+    const menu = document.getElementById('mobile-menu');
+    btn.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true' || false;
+      btn.setAttribute('aria-expanded', !expanded);
+      menu.classList.toggle('hidden');
+    });
+  </script>
+
+</body>
+</html>

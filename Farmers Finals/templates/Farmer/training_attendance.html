@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Training Attendance</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+        /* Reset and base */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f0faf0;
+            color: #2f4f2f;
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem 2.5rem;
+            border-radius: 14px;
+            box-shadow: 0 12px 32px rgba(46, 117, 46, 0.15);
+            animation: fadeIn 1s ease forwards;
+            opacity: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #3a633a;
+            text-shadow: 1px 1px 1px #cde5bd;
+            margin-bottom: 2rem;
+            font-weight: 700;
+            font-size: 2.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        /* Flash messages */
+        ul.flashes {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 2rem;
+            animation: slideFadeIn 0.8s ease forwards;
+            opacity: 0;
+        }
+        ul.flashes li {
+            padding: 1rem 1.2rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        ul.flashes li.success {
+            background-color: #d4edda;
+            color: #155724;
+            box-shadow: 0 0 8px #a3d7a5cc;
+        }
+        ul.flashes li.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            box-shadow: 0 0 8px #e59ea0cc;
+        }
+        ul.flashes li.info {
+            background-color: #cce5ff;
+            color: #004085;
+            box-shadow: 0 0 8px #9ec1e1cc;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffffdd;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(58, 93, 20, 0.1);
+            animation: slideFadeIn 0.9s ease forwards;
+            opacity: 0;
+        }
+        thead {
+            background-color: #4caf50;
+            color: white;
+            text-align: left;
+        }
+        thead th {
+            padding: 1rem 1.2rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+        tbody tr {
+            border-bottom: 1px solid #a9c4a0;
+            transition: background-color 0.3s ease;
+            cursor: default;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: #e9f2db;
+        }
+        tbody tr:hover {
+            background-color: #d3e8c6;
+        }
+        tbody td {
+            padding: 1rem 1.2rem;
+            font-size: 1rem;
+            color: #3a633a;
+        }
+
+        p {
+            text-align: center;
+            font-style: italic;
+            color: #658d5d;
+            margin-top: 2rem;
+            font-weight: 600;
+            animation: slideFadeIn 0.9s ease forwards;
+            opacity: 0;
+        }
+
+        /* Back to dashboard link */
+        a.back-link {
+            display: inline-block;
+            margin-top: 2.5rem;
+            background-color: #4caf50;
+            color: white;
+            padding: 0.6rem 1.6rem;
+            border-radius: 8px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 6px 12px rgba(74, 112, 74, 0.3);
+            user-select: none;
+            animation: fadeIn 1.2s ease forwards;
+            opacity: 0;
+        }
+        a.back-link:hover {
+            background-color: #3a863a;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes slideFadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem 1.2rem;
+            }
+            thead th, tbody td {
+                padding: 0.8rem 1rem;
+                font-size: 0.9rem;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            a.back-link {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Training Attendance</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    {% if records %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Session ID</th>
+                    <th>Attended</th>
+                    <th>Feedback</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr>
+                    <td>{{ record.session_id }}</td>
+                    <td>{{ 'Yes' if record.attended else 'No' }}</td>
+                    <td>{{ record.feedback or 'N/A' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No training attendance records found.</p>
+    {% endif %}
+
+    <a href="{{ url_for('farmer_dashboard') }}" class="back-link">← Back to Dashboard</a>
+</body>
+</html>

@@ -1,0 +1,102 @@
+-- USERS table: Handles login/signup and role management
+CREATE TABLE Users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role ENUM('farmer', 'technician', 'admin') NOT NULL
+);
+
+-- FARMERS table
+CREATE TABLE Farmers (
+    farmer_id INT PRIMARY KEY,
+    location VARCHAR(150),
+    FOREIGN KEY (farmer_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+
+-- TECHNICIANS table
+CREATE TABLE Technicians (
+    technician_id INT PRIMARY KEY,
+    expertise TEXT,
+    FOREIGN KEY (technician_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+
+-- ADMINS table
+CREATE TABLE Admins (
+    admin_id INT PRIMARY KEY,
+    FOREIGN KEY (admin_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+
+-- CROPS table
+CREATE TABLE Crops (
+    crop_id INT AUTO_INCREMENT PRIMARY KEY,
+    farmer_id INT NOT NULL,
+    name VARCHAR(100),
+    planting_date DATE,
+    FOREIGN KEY (farmer_id) REFERENCES Farmers(farmer_id) ON DELETE CASCADE
+);
+
+-- CROP PROGRESS table
+CREATE TABLE CropProgress (
+    progress_id INT AUTO_INCREMENT PRIMARY KEY,
+    crop_id INT NOT NULL,
+    stage VARCHAR(100),
+    health_status VARCHAR(100),
+    issues TEXT,
+    date_reported DATE,
+    FOREIGN KEY (crop_id) REFERENCES Crops(crop_id) ON DELETE CASCADE
+);
+
+-- EXPERT REQUESTS table
+CREATE TABLE ExpertRequests (
+    request_id INT AUTO_INCREMENT PRIMARY KEY,
+    farmer_id INT NOT NULL,
+    crop_id INT,
+    problem TEXT,
+    date_submitted DATE,
+    status ENUM('open', 'responded', 'closed') DEFAULT 'open',
+    FOREIGN KEY (farmer_id) REFERENCES Farmers(farmer_id) ON DELETE CASCADE,
+    FOREIGN KEY (crop_id) REFERENCES Crops(crop_id) ON DELETE SET NULL
+);
+
+-- CONSULTATIONS table
+CREATE TABLE Consultations (
+    consultation_id INT AUTO_INCREMENT PRIMARY KEY,
+    request_id INT NOT NULL,
+    technician_id INT NOT NULL,
+    advice_given TEXT,
+    date_responded DATE,
+    FOREIGN KEY (request_id) REFERENCES ExpertRequests(request_id) ON DELETE CASCADE,
+    FOREIGN KEY (technician_id) REFERENCES Technicians(technician_id) ON DELETE CASCADE
+);
+
+-- TECHNICAL RESOURCES table
+CREATE TABLE TechnicalResources (
+    resource_id INT AUTO_INCREMENT PRIMARY KEY,
+    technician_id INT NOT NULL,
+    title VARCHAR(255),
+    file_url TEXT,
+    uploaded_on DATE,
+    FOREIGN KEY (technician_id) REFERENCES Technicians(technician_id) ON DELETE CASCADE
+);
+
+-- TRAINING SESSIONS table
+CREATE TABLE TrainingSessions (
+    session_id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(150),
+    description TEXT,
+    trainer_id INT NOT NULL,
+    scheduled_date DATETIME,
+    FOREIGN KEY (trainer_id) REFERENCES Technicians(technician_id) ON DELETE SET NULL
+);
+
+-- TRAINING ATTENDANCE table
+CREATE TABLE TrainingAttendance (
+    attendance_id INT AUTO_INCREMENT PRIMARY KEY,
+    session_id INT NOT NULL,
+    farmer_id INT NOT NULL,
+    attended BOOLEAN DEFAULT FALSE,
+    feedback TEXT,
+    FOREIGN KEY (session_id) REFERENCES TrainingSessions(session_id) ON DELETE CASCADE,
+    FOREIGN KEY (farmer_id) REFERENCES Farmers(farmer_id) ON DELETE CASCADE
+);

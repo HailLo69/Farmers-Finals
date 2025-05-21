@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Your Crops</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
+
+        body {
+            font-family: 'Roboto Slab', serif;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #f3f6ec;
+            color: #3a5a20;
+            border-radius: 15px;
+            box-shadow: 0 6px 18px rgba(74, 108, 47, 0.2);
+            animation: fadeIn 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        h2 {
+            text-align: center;
+            color: #4a6c2f;
+            margin-bottom: 1.5rem;
+            text-shadow: 1px 1px 1px #b9d9a5;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: #d8e4b7;
+            color: #375124;
+            font-weight: 700;
+            border-bottom: 2px solid #a8bf7f;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f6f9e9;
+        }
+
+        tr:hover {
+            background-color: #d0df94;
+        }
+
+        a {
+            display: inline-block;
+            margin-right: 1.5rem;
+            text-decoration: none;
+            color: #5d8040;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #3a5a20;
+            text-decoration: underline;
+        }
+
+        p {
+            text-align: center;
+            font-style: italic;
+            color: #7a8a5c;
+            margin-top: 2rem;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            body {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            a {
+                display: block;
+                margin-bottom: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>{{ name }}'s Crops</h2>
+
+    {% if crops %}
+    <table>
+        <thead>
+            <tr>
+                <th>Crop Name</th>
+                <th>Planting Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for crop in crops %}
+            <tr>
+                <td>{{ crop.name }}</td>
+                <td>{{ crop.planting_date.strftime('%Y-%m-%d') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No crops added yet.</p>
+    {% endif %}
+
+    <br><br>
+    <a href="{{ url_for('add_crop') }}">Add New Crop</a>
+    <a href="{{ url_for('farmer_dashboard') }}">Back to Dashboard</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>

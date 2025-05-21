@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Technician Dashboard</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap" rel="stylesheet" />
+  <style>
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
+      transition: all 0.25s ease-in-out;
+    }
+    body {
+      font-family: 'Fira Mono', monospace;
+      max-width: 960px;
+      margin: 2rem auto;
+      padding: 1.5rem 2rem;
+      background: #121417;
+      color: #e0e6f1;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      user-select: none;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-weight: 700;
+      font-size: 2.8rem;
+      letter-spacing: 0.12em;
+      color: #00bfff;
+      text-shadow: 0 0 12px #00bfff99;
+      text-transform: uppercase;
+    }
+    h3 {
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: #00bfffcc;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #00bfff33;
+      padding-bottom: 0.4rem;
+      text-transform: uppercase;
+      user-select: text;
+    }
+
+    /* Section Cards */
+    .section {
+      background: #1c1f26;
+      padding: 2rem 2.4rem;
+      margin-bottom: 3rem;
+      border-radius: 8px;
+      box-shadow: 0 0 15px #00bfff33;
+      border-left: 5px solid #00bfff;
+    }
+
+    /* Typography */
+    label {
+      font-weight: 600;
+      display: block;
+      margin-top: 1.5rem;
+      color: #00bfff;
+      user-select: text;
+    }
+    input[type="text"],
+    input[type="number"],
+    textarea {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      margin-top: 0.3rem;
+      margin-bottom: 1.5rem;
+      border: 1.8px solid #007acc;
+      border-radius: 4px;
+      font-size: 1.05rem;
+      background-color: #0e1219;
+      color: #66ccff;
+      font-weight: 500;
+      resize: vertical;
+      box-shadow: inset 0 0 6px #007acc88;
+      outline-offset: 2px;
+      font-family: 'Fira Mono', monospace;
+      user-select: text;
+    }
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    textarea:focus {
+      border-color: #00bfff;
+      box-shadow: 0 0 10px #00bfffcc;
+      background-color: #122138;
+      color: #a0e9ff;
+    }
+    input[readonly] {
+      background-color: #223344;
+      cursor: not-allowed;
+      color: #5588aa;
+      box-shadow: none;
+    }
+
+    /* Buttons */
+    button {
+      background: #00bfff;
+      color: #121417;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border: none;
+      padding: 0.75rem 2.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px #00bfffbb;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      user-select: none;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      font-family: 'Fira Mono', monospace;
+      display: inline-block;
+    }
+    button:hover {
+      background: #0099cc;
+      box-shadow: 0 8px 25px #0099cccc;
+      transform: translateY(-3px);
+      color: #d0f0ff;
+    }
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 12px #0077aaaa;
+    }
+
+    /* Table Styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      color: #a0d8ff;
+      user-select: text;
+    }
+    th, td {
+      border: 1px solid #002f4b;
+      padding: 0.75rem 1rem;
+      vertical-align: middle;
+      text-align: left;
+    }
+    th {
+      background: #003a63;
+      color: #00bfff;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      text-transform: uppercase;
+      user-select: text;
+    }
+    tr:hover {
+      background-color: #005f9e;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    /* Notes and small text */
+    .note {
+      font-style: italic;
+      color: #0099cc;
+      margin-top: 0.6rem;
+      font-size: 0.95rem;
+      user-select: text;
+    }
+
+    /* Links */
+    a.logout-link, a.link-green {
+      display: inline-block;
+      margin-top: 1.2rem;
+      font-weight: 700;
+      font-size: 1.05rem;
+      text-decoration: none;
+      user-select: none;
+      transition: color 0.3s ease;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 2px;
+      font-family: 'Fira Mono', monospace;
+    }
+    a.logout-link {
+      color: #ff5555;
+    }
+    a.logout-link:hover {
+      color: #ff9999;
+      border-color: #ff9999;
+    }
+    a.link-green {
+      color: #00bfff;
+    }
+    a.link-green:hover {
+      color: #66d9ff;
+      border-color: #66d9ff;
+    }
+
+    /* Inline form styling inside table */
+    form.inline-advice-form {
+      margin: 0;
+    }
+    form.inline-advice-form textarea {
+      font-family: 'Fira Mono', monospace;
+      width: 100%;
+      resize: vertical;
+      padding: 0.5rem;
+      font-size: 0.9rem;
+      border-radius: 4px;
+      border: 1.5px solid #007acc;
+      box-shadow: inset 0 0 6px #007acc88;
+      background-color: #0e1219;
+      color: #66ccff;
+      margin-bottom: 0.5rem;
+      outline-offset: 2px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    form.inline-advice-form textarea:focus {
+      border-color: #00bfff;
+      box-shadow: 0 0 10px #00bfffcc;
+      background-color: #122138;
+      color: #a0e9ff;
+    }
+    form.inline-advice-form button {
+      padding: 0.4rem 1rem;
+      font-size: 0.9rem;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px #00bfffbb;
+    }
+
+  </style>
+</head>
+<body>
+
+  <h2>Hello, {{ name }}!</h2>
+
+  <!-- Technician Profile Section -->
+  <div class="section" role="region" aria-label="Technician Profile">
+    {% if technician_id %}
+      <p>Your Technician Profile ID: <strong>{{ technician_id }}</strong></p>
+      <p>Your expertise: <strong>{{ expertise }}</strong></p>
+      <p class="note">Update your expertise using the form below.</p>
+    {% else %}
+      <p class="note">You don’t have a Technician Profile yet. Please create one below.</p>
+    {% endif %}
+
+    <form action="{{ url_for('update_technician_profile') }}" method="POST" aria-label="Technician Profile Update Form">
+      <label for="technician_id">Technician Profile ID:</label>
+      <input
+        type="number"
+        id="technician_id"
+        name="technician_id"
+        value="{{ technician_id or '' }}"
+        {% if technician_id %} readonly {% endif %}
+        required
+        aria-required="true"
+      />
+
+      <label for="expertise">Expertise:</label>
+      <input
+        type="text"
+        id="expertise"
+        name="expertise"
+        placeholder="Enter your expertise"
+        value="{{ expertise or '' }}"
+        required
+        aria-required="true"
+      />
+
+      <button type="submit" aria-label="Save Profile">Save Profile</button>
+    </form>
+  </div>
+
+  <!-- Assigned Expert Requests Section -->
+  <div class="section" role="region" aria-label="Assigned Expert Requests">
+    <h3>Assigned Expert Requests</h3>
+
+    {% if requests %}
+    <table>
+      <thead>
+        <tr>
+          <th>Request Name</th>
+          <th>Farmer</th>
+          <th>Crop</th>
+          <th>Problem</th>
+          <th>Date Submitted</th>
+          <th>Status</th>
+          <th>Advice</th>
+          <th>Date Responded</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for req in requests %}
+        <tr>
+          <td>{{ req.request_name }}</td>
+          <td>{{ req.farmer_name }}</td>
+          <td>{{ req.crop_name or 'N/A' }}</td>
+          <td>{{ req.problem }}</td>
+          <td>{{ req.date_submitted }}</td>
+          <td>{{ req.status }}</td>
+          <td>
+            {% if req.advice_given %}
+              {{ req.advice_given }}
+            {% elif req.status != 'responded' %}
+              <form action="{{ url_for('consultations', request_id=req.request_id) }}" method="POST" class="inline-advice-form" aria-label="Submit advice for request {{ req.request_name }}">
+                <textarea name="advice_given" rows="3" placeholder="Enter your advice here..." required></textarea>
+                <button type="submit">Submit</button>
+              </form>
+            {% else %}
+              <strong>Already responded</strong>
+            {% endif %}
+          </td>
+          <td>{{ req.date_responded or '-' }}</td>
+          <td>
+            <a href="{{ url_for('view_expert_request', request_id=req.request_id) }}" style="color:#00bfff; font-weight:700;">View Request</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <p class="note">No expert requests available.</p>
+    {% endif %}
+  </div>
+
+  <!-- Link to Consultations Page -->
+  <div class="section" style="text-align:center;">
+    <a href="{{ url_for('consultations') }}" class="logout-link">View All Consultations</a>
+  </div>
+
+  <!-- Link to Technical Resources Page -->
+  <div class="section" style="text-align:center;">
+    <a href="{{ url_for('technician_resources') }}" class="link-green">View Technical Resources</a>
+  </div>
+
+  <!-- Link to Training Sessions Page -->
+  <div class="section" style="text-align:center;">
+    <a href="{{ url_for('add_training_session') }}" class="link-green">View Training Sessions</a>
+  </div>
+
+
+  <!-- Logout -->
+  <div class="section" style="text-align:center;">
+    <a href="{{ url_for('logout') }}" class="logout-link">Logout</a>
+  </div>
+
+</body>
+</html>
